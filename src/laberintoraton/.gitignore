@@ -1,0 +1,7 @@
+# Java
+/bin/
+/out/
+/*.class
+
+# VS Code
+.vscode/
