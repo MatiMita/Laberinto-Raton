@@ -6,9 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 
+
 public class MainMenuPanel extends JPanel {
-    
+    private MainFrame frame;
     public MainMenuPanel(MainFrame frame) {
+        this.frame = frame;
         setName(MainFrame.MENU_SCREEN);
         setupUI();
     }
@@ -18,7 +20,7 @@ public class MainMenuPanel extends JPanel {
         
         // Botón Iniciar Juego
         JButton startButton = new JButton("Iniciar Juego");
-        //startButton.addActionListener(e -> mainFrame.showScreen(MainFrame.CHARACTER_SELECT_SCREEN));
+        startButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
         add(startButton);
         add(startButton);
         add(Box.createVerticalStrut(5));
@@ -39,8 +41,10 @@ public class MainMenuPanel extends JPanel {
         
         // Botón Salir
         JButton exitButton = new JButton("Salir");
-        exitButton.addActionListener(_ -> System.exit(0));
+        exitButton.addActionListener(e -> System.exit(0));
         add(exitButton);
         add(exitButton);
+
+
     }
 }
