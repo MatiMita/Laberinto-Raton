@@ -7,28 +7,26 @@ import app.MainFrame;
 
 public class Opciones extends JPanel {
 
-    private MainFrame frame;
-
     public Opciones(MainFrame frame) {
-        this.frame = frame;
-        setLayout(null);
-        setBackground(new Color(210, 190, 255)); // fondo morado más claro
 
-        // Título principal
+        setLayout(null);
+        setBackground(new Color(210, 190, 255)); 
+
+       
         JLabel title = new JLabel("MENÚ DE OPCIONES", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 32));
         title.setForeground(new Color(100, 70, 160));
         title.setBounds(150, 50, 500, 40);
         add(title);
 
-        // Subtítulo
+       
         JLabel subTitle = new JLabel("ESCOGE TU RATÓN", SwingConstants.CENTER);
         subTitle.setFont(new Font("Arial", Font.BOLD, 24));
         subTitle.setForeground(new Color(100, 70, 160));
         subTitle.setBounds(200, 100, 400, 30);
         add(subTitle);
 
-        // Botones centrados
+        
         JButton ratonBlanco = new JButton("Ratón Blanco");
         ratonBlanco.setBounds(300, 200, 200, 40);
         styleMouseButton(ratonBlanco);
@@ -45,7 +43,7 @@ public class Opciones extends JPanel {
         add(ratonCafe);
         add(ratonPlomo);
 
-        // Botón para volver al menú principal
+       
         JButton botonRegresar = new JButton("← Volver al Menú Principal");
         botonRegresar.setBounds(280, 450, 250, 40);
         botonRegresar.setBackground(new Color(100, 70, 160));
