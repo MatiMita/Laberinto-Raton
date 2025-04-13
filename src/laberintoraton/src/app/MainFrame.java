@@ -12,6 +12,8 @@ public class MainFrame extends JFrame {
     // Constantes para identificar pantallas
     public static final String MENU_SCREEN = "MENU";
     public static final String OPCIONES_SCREEN = "OPCIONES";
+    public static final String MAIN_MENU_SCREEN = "MainMenu";
+
  //public static final String CHARACTER_SELECT_SCREEN = "CHARACTER_SELECT";
     //public static final String GAME_SCREEN = "GAME";
     //public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
@@ -72,7 +74,7 @@ public class MainFrame extends JFrame {
                 //break;
 
         }
-
+     
         currentPanel.setName(screenName);
         mainPanel.add(currentPanel);
         mainPanel.revalidate();
