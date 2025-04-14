@@ -9,7 +9,7 @@ public class MainMenuPanel extends JPanel {
     
     public MainMenuPanel(MainFrame frame) {
         setName(MainFrame.MENU_SCREEN);
-        setName(new BorderLayout());
+        setLayout(new BorderLayout());
         setupUI(frame);
     }
 
