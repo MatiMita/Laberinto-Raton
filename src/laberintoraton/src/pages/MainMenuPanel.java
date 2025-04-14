@@ -49,7 +49,7 @@ public class MainMenuPanel extends JPanel {
         
         // Botón Iniciar Juego
         JButton startButton = new JButton("Iniciar Juego");
-            //startButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
+        startButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(startButton);
         panelPrincipal.add(Box.createVerticalStrut(20));
