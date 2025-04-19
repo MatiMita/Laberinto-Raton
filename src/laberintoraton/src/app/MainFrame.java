@@ -3,6 +3,9 @@ package app;
 import pages.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+//import java.lang.instrument.ClassDefinition;
+
 import javax.swing.BoxLayout;
 
 public class MainFrame extends JFrame {
@@ -13,6 +16,8 @@ public class MainFrame extends JFrame {
     public static final String MENU_SCREEN = "MENU";
     public static final String OPCIONES_SCREEN = "OPCIONES";
     public static final String MAIN_MENU_SCREEN = "MainMenu";
+    public static final String NIVELES_SCREEN = "NIVELES";
+    public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
 
  //public static final String CHARACTER_SELECT_SCREEN = "CHARACTER_SELECT";
     //public static final String GAME_SCREEN = "GAME";
@@ -45,6 +50,32 @@ public class MainFrame extends JFrame {
         
        
     }
+    //public void showCasillaNiveles(String ratonSeleccionado) {
+        //setContentPane(new CasillaNiveles(this, ratonSeleccionado));
+        //revalidate();
+    //}
+
+    public void showPantallaOpciones() {
+        showScreen(OPCIONES_SCREEN);
+    }
+    private String ultimoRatonSeleccionado;
+
+    public void setUltimoRatonSeleccionado(String raton) {
+    this.ultimoRatonSeleccionado = raton;
+    }
+
+    //public void showGame(String ratonSeleccionado, String nivelSelecconado) {
+      //  LaberintoJuego game = new LaberintoJuego(this, ratonSeleccionado, nivelSelecconado);
+        //setContentPane(game);
+        //revalidate();
+        //repaint();
+        //game.requestFocusInWindow(); // para que reciba teclas
+    //}
+    public String getRatonSeleccionado() {
+        return this.ultimoRatonSeleccionado;
+    }
+        
+    
 
     public void showScreen(String screenName) {
         mainPanel.removeAll();
@@ -57,12 +88,20 @@ public class MainFrame extends JFrame {
             case OPCIONES_SCREEN:
                 currentPanel = new Opciones(this);
                 break;
-            
-            //case INSTRUCTIONS_SCREEN:
-              //  currentPanel = new IntructionsPanel(this);
-                //((IntructionsPanel)currentPanel).setupUI();
+            //case NIVELES_SCREEN:
+                // Necesitas guardar el ratón previamente o pedirlo de otra forma
+                //currentPanel = new CasillaNiveles(this, ultimoRatonSeleccionado);
                 //break;
+            
+                case INSTRUCTIONS_SCREEN:
+                 currentPanel = new InstruccionesPanel(this);
+                break;
 
+            /*case INSTRUCTIONS_SCREEN:
+               currentPanel = new IntruccionesPanel(this);
+                ((IntruccionesPanel)currentPanel).setupUI();
+                 break;
+            */
             //case CHARACTER_SELECT_SCREEN:
               //  currentPanel = new CharacterSelectPanel(this);
                // ((CharacterSelectPanel)currentPanel).setupUI();
@@ -81,4 +120,4 @@ public class MainFrame extends JFrame {
         mainPanel.repaint();
         
     }
-}
+}    

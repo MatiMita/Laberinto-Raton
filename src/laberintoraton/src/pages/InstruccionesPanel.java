@@ -1,117 +1,90 @@
 package pages;
 
 import app.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class InstruccionesPanel extends JPanel {
 
     public InstruccionesPanel(MainFrame frame) {
-        setLayout(new BorderLayout());
+        setLayout(null);
+        setBackground(new Color(210, 190, 255)); // Fondo morado claro
 
-        // Fondo con gradiente
-        setOpaque(false);
+        JLabel titulo = new JLabel("INSTRUCCIONES");
+        titulo.setFont(new Font("Arial", Font.BOLD, 30));
+        titulo.setBounds(270, 20, 300, 40);
+        titulo.setForeground(Color.ORANGE);
+        add(titulo);
 
-        // Título
-        JLabel title = new JLabel("INSTRUCCIONES", SwingConstants.CENTER);
-        title.setFont(new Font("Monospaced", Font.BOLD, 28));
-        title.setForeground(Color.ORANGE);
-        add(title, BorderLayout.NORTH);
+        // Ratón café
+        ImageIcon ratonCafeIcon = new ImageIcon(getClass().getResource("resources/ratoncafe.png")); // Ruta corregida
+        Image ratonCafeImage = ratonCafeIcon.getImage();
+        Image ratonCafeScaled = ratonCafeImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH); // Redimensionar la imagen
+        JLabel ratonCafeImg = new JLabel(new ImageIcon(ratonCafeScaled));
+        ratonCafeImg.setBounds(70, 80, 120, 120); // Ajuste de tamaño y posición
+        add(ratonCafeImg);
 
-        // Panel central con los ratones
-        JPanel mousePanel = new JPanel(new GridLayout(1, 3, 20, 10));
-        mousePanel.setOpaque(false);
-        mousePanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 10, 40));
+        JLabel textoCafe = new JLabel("<html>El ratón café<br>se mueve en 4<br>direcciones</html>");
+        textoCafe.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        textoCafe.setBounds(70, 210, 150, 80); // Ajuste de posición para evitar que se solape con la imagen
+        add(textoCafe);
 
-        mousePanel.add(createMousePanel("Raton café", "El raton cafe se mueve en 4 direcciones", "C:\\Users\\HP 256\\Downloads\\ratoncafe.png"));
-        mousePanel.add(createMousePanel("Raton plomo", "El raton plomo puede moverse en las cuatro direcciones y también en las 4 diagonales", "C:\\Users\\HP 256\\Downloads\\ratonblanco.png"));
-        mousePanel.add(createMousePanel("Raton blanco", "El raton blanco puede moverse en las 4 direcciones y tiene la habilidad de saltar una pared sin salirse del laberinto", "C:\\Users\\HP 256\\Downloads\\ratonplomo.png"));
+        // Ratón plomo
+        ImageIcon ratonPlomoIcon = new ImageIcon(getClass().getResource("resources/ratonplomo.png")); // Ruta corregida
+        Image ratonPlomoImage = ratonPlomoIcon.getImage();
+        Image ratonPlomoScaled = ratonPlomoImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH); // Redimensionar la imagen
+        JLabel ratonPlomoImg = new JLabel(new ImageIcon(ratonPlomoScaled));
+        ratonPlomoImg.setBounds(340, 80, 120, 120); // Ajuste de tamaño y posición
+        add(ratonPlomoImg);
 
-        add(mousePanel, BorderLayout.CENTER);
+        JLabel textoPlomo = new JLabel("<html>El ratón plomo puede<br>moverse en las cuatro<br>direcciones y también<br>en las 4 diagonales</html>");
+        textoPlomo.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        textoPlomo.setBounds(310, 210, 200, 100); // Ajuste de posición para evitar que se solape con la imagen
+        add(textoPlomo);
 
-        // Objetivos del juego
-        JPanel objetivosPanel = new JPanel();
-        objetivosPanel.setOpaque(false);
-        objetivosPanel.setLayout(new BoxLayout(objetivosPanel, BoxLayout.Y_AXIS));
-        objetivosPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+        // Ratón blanco
+        ImageIcon ratonBlancoIcon = new ImageIcon(getClass().getResource("resources/ratonblanco.png")); // Ruta corregida
+        Image ratonBlancoImage = ratonBlancoIcon.getImage();
+        Image ratonBlancoScaled = ratonBlancoImage.getScaledInstance(120, 120, Image.SCALE_SMOOTH); // Redimensionar la imagen
+        JLabel ratonBlancoImg = new JLabel(new ImageIcon(ratonBlancoScaled));
+        ratonBlancoImg.setBounds(600, 80, 120, 120); // Ajuste de tamaño y posición
+        add(ratonBlancoImg);
 
-        JLabel objetivosTitle = new JLabel("OBJETIVOS DEL JUEGO:");
-        objetivosTitle.setFont(new Font("Monospaced", Font.BOLD, 18));
-        objetivosTitle.setForeground(Color.ORANGE);
-        objetivosTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        objetivosPanel.add(objetivosTitle);
-        objetivosPanel.add(Box.createVerticalStrut(10));
+        JLabel textoBlanco = new JLabel("<html>El ratón blanco puede<br>moverse en las 4<br>direcciones y tiene<br>la habilidad de saltar<br>una pared sin salirse<br>del laberinto</html>");
+        textoBlanco.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        textoBlanco.setBounds(570, 210, 200, 120); // Ajuste de posición para evitar que se solape con la imagen
+        add(textoBlanco);
 
-        String[] objetivos = {
-            "• Encontrar la salida",
-            "• Se pierde por limite de tiempo",
-            "• Resuelve en mínimo tiempo",
-            "• El ganador será el que resuelva en el menor tiempo posible"
-        };
+        // OBJETIVOS DEL JUEGO
+        JLabel objetivosTitulo = new JLabel("OBJETIVOS DEL JUEGO:");
+        objetivosTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        objetivosTitulo.setForeground(Color.ORANGE);
+        objetivosTitulo.setBounds(270, 320, 300, 30);
+        add(objetivosTitulo);
 
-        for (String texto : objetivos) {
-            JLabel label = new JLabel(texto);
-            label.setFont(new Font("Monospaced", Font.PLAIN, 14));
-            label.setForeground(Color.WHITE);
-            label.setAlignmentX(Component.CENTER_ALIGNMENT);
-            objetivosPanel.add(label);
-        }
+        JLabel objetivos = new JLabel("<html>"
+                + "• Encontrar la salida<br>"
+                + "• Se pierde por límite de tiempo<br>"
+                + "• Resuelve en mínimo tiempo<br>"
+                + "• El ganador será el que resuelva<br>"
+                + "&nbsp;&nbsp;en el menor tiempo posible"
+                + "</html>");
+        objetivos.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        objetivos.setBounds(230, 360, 400, 100);
+        add(objetivos);
 
-        add(objetivosPanel, BorderLayout.SOUTH);
-
-        // Botón volver
-        JButton backButton = new JButton("Volver al menú");
-        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> frame.showScreen(MainFrame.MENU_SCREEN));
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(backButton);
-        objetivosPanel.add(Box.createVerticalStrut(10));
-        objetivosPanel.add(buttonPanel);
-    }
-
-    private JPanel createMousePanel(String title, String desc, String imagePath) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setOpaque(false);
-        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Asegúrate de que estas imágenes existen o cámbialas por URLs reales
-        JLabel img = new JLabel(new ImageIcon(imagePath));
-        img.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel descLabel = new JLabel("<html><div style='text-align: center;'>" + desc + "</div></html>");
-        descLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        descLabel.setForeground(Color.WHITE);
-        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.add(img);
-        panel.add(Box.createVerticalStrut(5));
-        panel.add(titleLabel);
-        panel.add(Box.createVerticalStrut(5));
-        panel.add(descLabel);
-
-        return panel;
-    }
-
-    // Degradado de fondo (azul a morado)
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        Color color1 = new Color(25, 50, 200);
-        Color color2 = new Color(150, 50, 200);
-        int width = getWidth();
-        int height = getHeight();
-        GradientPaint gp = new GradientPaint(0, 0, color1, width, height, color2);
-        g2d.setPaint(gp);
-        g2d.fillRect(0, 0, width, height);
-        g2d.dispose();
+        // Botón Volver
+        JButton volverBtn = new JButton("← Volver al Menú Principal");
+        volverBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        volverBtn.setBackground(new Color(100, 70, 160));
+        volverBtn.setForeground(Color.WHITE);
+        volverBtn.setFocusPainted(false);
+        volverBtn.setBounds(280, 500, 250, 40);
+        volverBtn.addActionListener((ActionEvent e) -> {
+            frame.showScreen(MainFrame.MENU_SCREEN);
+        });
+        add(volverBtn);
     }
 }
