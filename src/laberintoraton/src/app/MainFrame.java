@@ -1,4 +1,6 @@
 package app;
+    import java.awt.FlowLayout;
+
 
 import pages.*;
 import javax.swing.JFrame;
@@ -7,6 +9,7 @@ import javax.swing.JPanel;
 //import java.lang.instrument.ClassDefinition;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 
 public class MainFrame extends JFrame {
     private JPanel mainPanel;
@@ -21,7 +24,7 @@ public class MainFrame extends JFrame {
 
  //public static final String CHARACTER_SELECT_SCREEN = "CHARACTER_SELECT";
     //public static final String GAME_SCREEN = "GAME";
-    //public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
+    public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
     //public static final String SCORES_SCREEN = "SCORES";
     //public static final String GAME_OVER_SCREEN = "GAME_OVER";
     //public static final String VICTORY_SCREEN = "VICTORY";
@@ -37,6 +40,23 @@ public class MainFrame extends JFrame {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         initializeScreens();
+
+        // Agregar el botón "Volver al Menú" aquí, fuera del juego
+    JButton btnVolverMenu = new JButton("Volver al Menú");
+    btnVolverMenu.addActionListener(e -> {
+        // Detener cualquier temporizador si es necesario y regresar al menú
+        setContentPane(new MainMenuPanel(this));  // Cambiar al panel del menú principal
+        revalidate();
+        repaint();
+    });
+
+    // Esto agrega el botón al final del mainPanel, fuera del juego
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));  // Lo coloca a la derecha
+    buttonPanel.add(btnVolverMenu);
+
+    // Agregar el botón al panel principal
+    mainPanel.add(buttonPanel);
 
         add(mainPanel);
     }
@@ -78,8 +98,7 @@ public class MainFrame extends JFrame {
     
 
     public void showScreen(String screenName) {
-        mainPanel.removeAll();
-
+    
         switch(screenName) {
             case MENU_SCREEN:
                 currentPanel = new MainMenuPanel(this);

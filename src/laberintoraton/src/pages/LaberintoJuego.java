@@ -1,0 +1,448 @@
+// --------------------- LABERINTO JUEGO ---------------------
+package pages;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
+import app.MainFrame;
+
+public class LaberintoJuego extends JPanel implements KeyListener {
+    // --------------------- VARIABLES PRINCIPALES ---------------------
+    private int x, y; // Posición del ratón
+    private Timer timer;
+    private int tiempoRestante;
+    private final String tipoRaton;
+    private String[][] laberinto;
+    private boolean saltoDisponible = true; // Para el ratón blanco
+    private final MainFrame frame;
+    private JLabel timerLabel;
+    private long tiempoInicio;
+    private final String RECORD_FILE = "record.txt";
+    private final boolean haGanado = false;
+    private final boolean haPerdido = false;
+
+
+    // --------------------- CONSTRUCTOR PRINCIPAL ---------------------
+    public LaberintoJuego(MainFrame frame, String tipoRaton, String nivel) {
+        this.frame = frame;
+        this.tipoRaton = tipoRaton;
+
+        setFocusable(true);
+        addKeyListener(this);
+        setLayout(null);
+        setBackground(Color.WHITE);
+
+        definirLaberinto(nivel);
+        encontrarInicio(); // ← Posición inicial del ratón
+        iniciarTemporizador(nivel);
+       
+        addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP -> moverRaton(0, -1);
+                case KeyEvent.VK_DOWN -> moverRaton(0, 1);
+                case KeyEvent.VK_LEFT -> moverRaton(-1, 0);
+                case KeyEvent.VK_RIGHT -> moverRaton(1, 0);
+            }
+        }
+    });
+        
+        // --------------------- BOTÓN PARA REGRESAR AL MENÚ ---------------------
+        JButton botonRegresar = new JButton("← Volver al Menú Principal");
+        botonRegresar.setBounds(280,700,250, 40);
+        botonRegresar.setBackground(new Color(100, 70, 160));
+        botonRegresar.setForeground(Color.WHITE);
+        botonRegresar.setFont(new Font("Arial", Font.BOLD, 14));
+        add(botonRegresar);
+
+        botonRegresar.addActionListener(e -> {
+            if (timer != null) timer.stop();
+            frame.setContentPane(new MainMenuPanel(frame));
+            frame.revalidate();
+            frame.repaint();
+        });
+      setFocusable(true);
+    requestFocusInWindow();  
+    }
+
+    // --------------------- DEFINIR LABERINTO SEGÚN NIVEL ---------------------
+
+private void definirLaberinto(String nivel) {
+    // Nivel FÁCIL – Laberinto de 9x9 con una sola salida
+     if (nivel.equals("FACIL")) {
+        tiempoRestante = 20;
+        laberinto = new String[][]{
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#"},
+            {"#", "I", " ", "#", " ", " ", " ", "S", "#"},
+            {"#", " ", " ", "#", " ", "#", "#", "#", "#"},
+            {"#", "#", " ", "#", " ", " ", "#", "#", "#"},
+            {"#", "#", " ", " ", "#", " ", " ", " ", "#"},
+            {"#", "#", "#", " ", "#", "#", "#", " ", "#"},
+            {"#", " ", " ", " ", " ", " ", "#", " ", "#"},
+            {"#", " ", "#", "#", "#", " ", " ", " ", "#"},
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#"}
+        };
+    }
+    // Nivel MEDIO – Laberinto de 11x11
+    else if (nivel.equals("MEDIO")) {
+        tiempoRestante = 30;
+        laberinto = new String[][]{
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#"},
+            {"#", "I", " ", " ", "#", "#", " ", "#", "S", " ", "#"},
+            {"#", "#", "#", " ", "#", "#", "#", "#", "#", " ", "#"},
+            {"#", "#", "#", " ", "#", "#", "#", "#", "#", " ", "#"},
+            {"#", " ", "#", " ", " ", " ", "#", "#", "#", " ", "#"},
+            {"#", " ", "#", "#", "#", " ", "#", "#", "#", " ", "#"},
+            {"#", " ", " ", " ", "#", " ", " ", " ", "#", " ", "#"},
+            {"#", "#", "#", " ", "#", "#", "#", " ", "#", " ", "#"},
+            {"#", "#", "#", " ", " ", " ", "#", " ", "#", " ", "#"},
+            {"#", " ", " ", "#", "#", " ", " ", " ", " ", " ", "#"},
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#"}
+        };
+    }
+    // Nivel DIFÍCIL – Laberinto de 15x15 
+    else {
+        tiempoRestante = 30;
+        laberinto = new String[][]{
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#"},
+            {"#", "I", " ", " ", "#", " ", "#", " ", " ", " ", "#", " ", "#", "S", "#"},
+            {"#", "#", "#", " ", "#", " ", "#", " ", "#", " ", "#", " ", "#", " ", "#"},
+            {"#", " ", " ", " ", "#", " ", " ", " ", "#", " ", " ", " ", " ", " ", "#"},
+            {"#", " ", "#", "#", "#", "#", " ", "#", "#", "#", "#", "#", "#", " ", "#"},
+            {"#", " ", "#", " ", " ", " ", " ", "#", " ", " ", " ", " ", "#", " ", "#"},
+            {"#", " ", "#", " ", "#", "#", " ", " ", "#", "#", "#", " ", "#", " ", "#"},
+            {"#", " ", "#", " ", "#", " ", " ", " ", " ", "#", "#", " ", "#", " ", "#"},
+            {"#", " ", "#", "#", "#", " ", "#", "#", " ", "#", " ", " ", "#", " ", "#"},
+            {"#", " ", " ", " ", " ", " ", "#", " ", " ", "#", "#", "#", "#", " ", "#"},
+            {"#", "#", " ", "#", "#", " ", "#", "#", "#", "#", " ", " ", "#", " ", "#"},
+            {"#", " ", " ", " ", "#", " ", " ", " ", " ", "#", " ", "#", "#", " ", "#"},
+            {"#", " ", "#", "#", "#", "#", "#", "#", " ", "#", " ", "#", " ", " ", "#"},
+            {"#", " ", " ", " ", " ", " ", " ", "#", " ", " ", " ", "#", " ", "#", "#"},
+            {"#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#", "#"}
+        };
+    }
+}
+
+
+
+    // -ENCONTRAR LA POSICIÓN DE INICION
+    private void encontrarInicio() {
+        for (int i = 0; i < laberinto.length; i++) {
+            for (int j = 0; j < laberinto[0].length; j++) {
+                if (laberinto[i][j].equals("I")) {
+                    x = j;
+                    y = i;
+                    return;
+                }
+            }
+        }
+    }
+
+    // - TEMPORIZADOR DEL JUEGO
+ private void iniciarTemporizador(String nivel) {
+    tiempoInicio = System.currentTimeMillis();
+
+    // Panel visual para el temporizador
+    JPanel timerPanel = new JPanel();
+    timerPanel.setLayout(null);
+    timerPanel.setBackground(new Color(230, 210, 255)); // Lila claro
+    timerPanel.setBounds(580, 10, 140, 50); // Posicionado en la parte superior derecha
+    timerPanel.setBorder(BorderFactory.createLineBorder(new Color(160, 100, 220), 2, true)); // Borde morado redondeado
+
+    timerLabel = new JLabel("Tiempo: " + tiempoRestante);
+    timerLabel.setBounds(10, 5, 120, 40);
+    timerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+    timerLabel.setForeground(new Color(80, 0, 130)); // Color morado fuerte
+    timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+    timerPanel.add(timerLabel);
+    add(timerPanel);
+
+    // Timer con cambio de color en los últimos 10 segundos
+    timer = new Timer(1000, e -> {
+        tiempoRestante--;
+        timerLabel.setText("Tiempo: " + tiempoRestante);
+
+        if (tiempoRestante <= 10) {
+            timerLabel.setForeground(Color.RED); // Cambia a rojo cuando quedan 10 segundos
+            timerPanel.setBackground(new Color(255, 200, 200)); // Fondo rosado claro para urgencia
+            timerPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2, true));
+        }
+
+        if (tiempoRestante <= 0) {
+            timer.stop();
+            mostrarResultado(false);
+        }
+    });
+    timer.start();
+}
+
+
+
+    // --------------------- MOSTRAR RESULTADO AL FINAL DEL JUEGO ---------------------
+ private void mostrarResultado(boolean gano) {
+    long tiempoFinal = (System.currentTimeMillis() - tiempoInicio) / 1000;
+    String mensaje = gano ? "¡Ganaste!" : "¡Perdiste por tiempo!";
+    long record = obtenerRecord();
+
+    if (gano && (record == -1 || tiempoFinal < record)) {
+        guardarRecord(tiempoFinal);
+        record = tiempoFinal;
+    }
+
+    // Panel personalizado   
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBackground(new Color(165,105,189)); // fondo oscuro azulado
+
+    JLabel titulo = new JLabel(mensaje);
+    titulo.setFont(new Font("Arial", Font.BOLD, 20));
+    titulo.setForeground(gano ? new Color(108,52,131) : new Color(255, 80, 80));
+    titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    JLabel tiempoLabel = new JLabel("Tu tiempo: " + tiempoFinal + " segundos");
+    tiempoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+    tiempoLabel.setForeground(Color.WHITE);
+    tiempoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    JLabel recordLabel = new JLabel("Récord: " + (record == -1 ? "Sin récord previo" : record + " segundos"));
+    recordLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+    recordLabel.setForeground(new Color(180, 200, 255));
+    recordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    panel.add(Box.createVerticalStrut(10));
+    panel.add(titulo);
+    panel.add(Box.createVerticalStrut(10));
+    panel.add(tiempoLabel);
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(recordLabel);
+    panel.add(Box.createVerticalStrut(10));
+
+    JOptionPane.showMessageDialog(this, panel, "Resultado del Juego", JOptionPane.PLAIN_MESSAGE);
+
+    frame.showScreen(MainFrame.MENU_SCREEN);
+}
+
+
+    private long obtenerRecord() {
+        try {
+            if (Files.exists(Path.of(RECORD_FILE))) {
+                return Long.parseLong(Files.readString(Path.of(RECORD_FILE)).trim());
+            }
+        } catch (Exception ignored) {}
+        return -1;
+    }
+
+    private void guardarRecord(long tiempo) {
+        try {
+            Files.writeString(Path.of(RECORD_FILE), String.valueOf(tiempo));
+        } catch (IOException e) {
+            System.err.println("No se pudo guardar el récord.");
+        }
+    }
+
+
+    // --------------------- VERIFICAR SI PUEDE MOVERSE A LA POSICIÓN ---------------------
+    private boolean puedeMover(int nx, int ny) {
+        return ny >= 0 && ny < laberinto.length &&
+               nx >= 0 && nx < laberinto[0].length &&
+               !laberinto[ny][nx].equals("#");
+    }
+
+    // --------------------- MOVER RATÓN SEGÚN SU TIPO Y HABILIDAD ---------------------
+    private void moverRaton(int dx, int dy) {
+        int nuevaX = x + dx;
+        int nuevaY = y + dy;
+
+        // Movimiento normal
+        if (puedeMover(nuevaX, nuevaY)) {
+            x = nuevaX;
+            y = nuevaY;
+        }
+        // Habilidad del ratón blanco: salto sobre una pared
+        else if (tipoRaton.equals("BLANCO") && saltoDisponible) {
+            int saltoX = x + dx * 2;
+            int saltoY = y + dy * 2;
+            if (saltoX >= 0 && saltoX < laberinto[0].length &&
+                saltoY >= 0 && saltoY < laberinto.length &&
+                laberinto[y + dy][x + dx].equals("#") && puedeMover(saltoX, saltoY)) {
+                x = saltoX;
+                y = saltoY;
+                saltoDisponible = false;
+            }
+        }
+
+        repaint();
+
+        if (laberinto[y][x].equals("S")) {
+            timer.stop();
+            mostrarResultado(true);
+        }
+    }
+
+    // --------------------- DIBUJAR LABERINTO Y RATÓN ---------------------
+   @Override
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D g2d = (Graphics2D) g.create();
+
+    int tileSize = 35;
+    int offsetX = 50;
+    int offsetY = 70;
+
+    Color lilaBajito = new Color(156, 39, 176);
+    Color sombra = new Color(50, 50, 50, 80);
+    Font fuenteLetrero = new Font("Arial", Font.BOLD, 14);
+    Color fondoLetrero = new Color(123, 31, 162); // Un lila fuerte y bonito
+
+    int labWidth = laberinto[0].length * tileSize;
+    int labHeight = laberinto.length * tileSize;
+
+    //Fondo decorativo del mapa
+    g2d.setColor(new Color(200, 170, 240));
+    g2d.fillRoundRect(offsetX - 15, offsetY - 15, labWidth + 30, labHeight + 30, 30, 30);
+
+    int inicioX = -1, inicioY = -1, salidaX = -1, salidaY = -1;
+
+    for (int i = 0; i < laberinto.length; i++) {
+        for (int j = 0; j < laberinto[0].length; j++) {
+            int x = j * tileSize + offsetX;
+            int y = i * tileSize + offsetY;
+
+            g2d.setColor(sombra);
+            g2d.fillRect(x + 3, y + 3, tileSize, tileSize);
+
+            switch (laberinto[i][j]) {
+                case "#" -> g2d.setColor(lilaBajito);
+                case "I" -> {
+                    g2d.setColor(new Color(50, 205, 50));
+                    inicioX = j;
+                    inicioY = i;
+                }
+                case "S" -> {
+                    g2d.setColor(new Color(65, 105, 225));
+                    salidaX = j;
+                    salidaY = i;
+                }
+                default -> g2d.setColor(Color.WHITE);
+            }
+
+            g2d.fillRect(x, y, tileSize, tileSize);
+            g2d.setColor(new Color(220, 220, 220));
+            g2d.drawRoundRect(x, y, tileSize, tileSize, 8, 8);
+        }
+    }
+
+    //  Ratón
+    int ratonX = this.x * tileSize + offsetX;
+    int ratonY = this.y * tileSize + offsetY;
+    Color ratonColor = switch (tipoRaton) {
+        case "BLANCO" -> Color.WHITE;
+        case "CAFE" -> new Color(139, 69, 19);
+        case "PLOMO" -> Color.DARK_GRAY;
+        default -> Color.PINK;
+    };
+    g2d.setColor(Color.BLACK);
+    g2d.fillOval(ratonX - 2, ratonY - 2, tileSize + 4, tileSize + 4);
+    g2d.setColor(ratonColor);
+    g2d.fillOval(ratonX, ratonY, tileSize, tileSize);
+
+    //LETREROS
+    g2d.setFont(fuenteLetrero);
+    g2d.setColor(fondoLetrero);
+
+    if (inicioX != -1 && inicioY != -1) {
+        int labelX = inicioX * tileSize + offsetX;
+        int labelY = inicioY * tileSize + offsetY - 25;
+        g2d.fillRoundRect(labelX - 10, labelY - 20, 80, 25, 15, 15);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString("Inicio", labelX, labelY);
+    }
+
+    if (salidaX != -1 && salidaY != -1) {
+        int labelX = salidaX * tileSize + offsetX;
+        int labelY = salidaY * tileSize + offsetY + tileSize + 10;
+        g2d.setColor(fondoLetrero);
+        g2d.fillRoundRect(labelX - 10, labelY - 15, 80, 25, 15, 15);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString("Meta", labelX, labelY + 5);
+    }
+    
+// Confetis si ha ganado
+if (haGanado) {
+    for (int i = 0; i < 100; i++) {
+        int confetiX = (int)(Math.random() * getWidth());
+        int confetiY = (int)(Math.random() * getHeight());
+        int tamaño = (int)(Math.random() * 8) + 4;
+        Color confetiColor = new Color(
+            (int)(Math.random() * 256),
+            (int)(Math.random() * 256),
+            (int)(Math.random() * 256)
+        );
+        g2d.setColor(confetiColor);
+        g2d.fillOval(confetiX, confetiY, tamaño, tamaño);
+    }
+     if (haGanado) {
+    int coronaX = ratonX + tileSize / 4;
+    int coronaY = ratonY - 10;
+    g2d.setColor(new Color(255, 215, 0)); // dorado
+    g2d.fillPolygon(
+        new int[]{coronaX, coronaX + 5, coronaX + 10},
+        new int[]{coronaY + 10, coronaY, coronaY + 10},
+        3
+    );
+}
+
+    g2d.setFont(new Font("Arial", Font.BOLD, 30));
+    g2d.setColor(new Color(255, 255, 255));
+    g2d.drawString("¡Ganaste!", getWidth() / 2 - 70, 40);
+}
+//  Pantalla de derrota
+if (haPerdido) {
+    g2d.setColor(new Color(91,44,111,180));
+    g2d.fillRect(0, 0, getWidth(), getHeight());
+
+    g2d.setFont(new Font("Arial", Font.BOLD, 30));
+    g2d.setColor(Color.RED);
+    g2d.drawString("¡Perdiste!", getWidth() / 2 - 70, getHeight() / 2);
+}
+
+    g2d.dispose();
+}
+
+
+    // --------------------- DETECTAR TECLAS PRESIONADAS ---------------------
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (tipoRaton.equals("PLOMO")) {
+            // Movimiento en 8 direcciones (diagonales y normales)
+            switch (key) {
+                case KeyEvent.VK_W -> moverRaton(0, -1);  // arriba
+                case KeyEvent.VK_S -> moverRaton(0, 1);   // abajo
+                case KeyEvent.VK_A -> moverRaton(-1, 0);  // izquierda
+                case KeyEvent.VK_D -> moverRaton(1, 0);   // derecha
+                case KeyEvent.VK_Q -> moverRaton(-1, -1); // diagonal arriba-izquierda
+                case KeyEvent.VK_E -> moverRaton(1, -1);  // diagonal arriba-derecha
+                case KeyEvent.VK_Z -> moverRaton(-1, 1);  // diagonal abajo-izquierda
+                case KeyEvent.VK_C -> moverRaton(1, 1);   // diagonal abajo-derecha
+            }
+        } else {
+            // Movimiento normal en 4 direcciones
+            switch (key) {
+                case KeyEvent.VK_UP -> moverRaton(0, -1);
+                case KeyEvent.VK_DOWN -> moverRaton(0, 1);
+                case KeyEvent.VK_LEFT -> moverRaton(-1, 0);
+                case KeyEvent.VK_RIGHT -> moverRaton(1, 0);
+            }
+        }
+    }
+
+    @Override public void keyReleased(KeyEvent e) {}
+    @Override public void keyTyped(KeyEvent e) {}
+
+}

@@ -50,7 +50,6 @@ public class MainMenuPanel extends JPanel {
         // Botón Iniciar Juego
         JButton startButton = new JButton("Iniciar Juego");
         startButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
-
             //startButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(startButton);
@@ -60,8 +59,10 @@ public class MainMenuPanel extends JPanel {
 
         // Botón Instrucciones
         JButton instructionsButton = new JButton("Instrucciones");
-         //instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
-         instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.INSTRUCTIONS_SCREEN));
+       // instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
+
+        instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.INSTRUCTIONS_SCREEN));
+
        instructionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(instructionsButton);
         panelPrincipal.add(Box.createVerticalStrut(10));   
