@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
 
  //public static final String CHARACTER_SELECT_SCREEN = "CHARACTER_SELECT";
     //public static final String GAME_SCREEN = "GAME";
-    public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
+   // public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
     //public static final String SCORES_SCREEN = "SCORES";
     //public static final String GAME_OVER_SCREEN = "GAME_OVER";
     //public static final String VICTORY_SCREEN = "VICTORY";
@@ -84,13 +84,13 @@ public class MainFrame extends JFrame {
     this.ultimoRatonSeleccionado = raton;
     }
 
-    //public void showGame(String ratonSeleccionado, String nivelSelecconado) {
-      //  LaberintoJuego game = new LaberintoJuego(this, ratonSeleccionado, nivelSelecconado);
-        //setContentPane(game);
-        //revalidate();
-        //repaint();
-        //game.requestFocusInWindow(); // para que reciba teclas
-    //}
+    public void showGame(String ratonSeleccionado, String nivelSelecconado) {
+        LaberintoJuego game = new LaberintoJuego(this, ratonSeleccionado, nivelSelecconado);
+        setContentPane(game);
+        revalidate();
+        repaint();
+        game.requestFocusInWindow(); // para que reciba teclas
+    }
     public String getRatonSeleccionado() {
         return this.ultimoRatonSeleccionado;
     }
@@ -107,10 +107,10 @@ public class MainFrame extends JFrame {
             case OPCIONES_SCREEN:
                 currentPanel = new Opciones(this);
                 break;
-            //case NIVELES_SCREEN:
-                // Necesitas guardar el ratón previamente o pedirlo de otra forma
-                //currentPanel = new CasillaNiveles(this, ultimoRatonSeleccionado);
-                //break;
+            case NIVELES_SCREEN:
+                 //Necesitas guardar el ratón previamente o pedirlo de otra forma
+                currentPanel = new CasillaNiveles(this, ultimoRatonSeleccionado);
+                break;
             
                 case INSTRUCTIONS_SCREEN:
                  currentPanel = new InstruccionesPanel(this);
@@ -134,9 +134,9 @@ public class MainFrame extends JFrame {
         }
      
         currentPanel.setName(screenName);
-        mainPanel.add(currentPanel);
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        setContentPane(currentPanel);
+        revalidate();
+        repaint();
         
     }
 }    
