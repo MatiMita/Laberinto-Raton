@@ -23,8 +23,10 @@ public class CasillaNiveles extends JPanel {
         add(botonFacil);
         botonFacil.addActionListener(e -> {
             frame.showGame(frame.getRatonSeleccionado(), "FACIL");
-        });
         
+            
+        });
+        //lola 
 
         JButton botonMedio = new JButton("MEDIO");
         botonMedio.setBounds(300, 260, 200, 40);
