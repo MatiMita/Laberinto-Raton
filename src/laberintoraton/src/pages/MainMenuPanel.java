@@ -60,7 +60,9 @@ public class MainMenuPanel extends JPanel {
         // Botón Instrucciones
         JButton instructionsButton = new JButton("Instrucciones");
        // instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.OPCIONES_SCREEN));
-        //instructionsButton.addActionListener(e -> mainFrame.showScreen(MainFrame.INSTRUCTIONS_SCREEN));
+
+        instructionsButton.addActionListener(e -> frame.showScreen(MainFrame.INSTRUCTIONS_SCREEN));
+
        instructionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(instructionsButton);
         panelPrincipal.add(Box.createVerticalStrut(10));   
