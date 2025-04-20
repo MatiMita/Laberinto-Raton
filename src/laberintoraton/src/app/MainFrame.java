@@ -20,10 +20,11 @@ public class MainFrame extends JFrame {
     public static final String OPCIONES_SCREEN = "OPCIONES";
     public static final String MAIN_MENU_SCREEN = "MainMenu";
     public static final String NIVELES_SCREEN = "NIVELES";
+    public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
 
  //public static final String CHARACTER_SELECT_SCREEN = "CHARACTER_SELECT";
     //public static final String GAME_SCREEN = "GAME";
-    public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
+   // public static final String INSTRUCTIONS_SCREEN = "INSTRUCTIONS";
     //public static final String SCORES_SCREEN = "SCORES";
     //public static final String GAME_OVER_SCREEN = "GAME_OVER";
     //public static final String VICTORY_SCREEN = "VICTORY";
@@ -69,10 +70,10 @@ public class MainFrame extends JFrame {
         
        
     }
-    public void showCasillaNiveles(String ratonSeleccionado) {
-        setContentPane(new CasillaNiveles(this, ratonSeleccionado));
-        revalidate();
-    }
+    //public void showCasillaNiveles(String ratonSeleccionado) {
+        //setContentPane(new CasillaNiveles(this, ratonSeleccionado));
+        //revalidate();
+    //}
 
     public void showPantallaOpciones() {
         showScreen(OPCIONES_SCREEN);
@@ -107,18 +108,19 @@ public class MainFrame extends JFrame {
                 currentPanel = new Opciones(this);
                 break;
             case NIVELES_SCREEN:
-                // Necesitas guardar el ratón previamente o pedirlo de otra forma
+                 //Necesitas guardar el ratón previamente o pedirlo de otra forma
                 currentPanel = new CasillaNiveles(this, ultimoRatonSeleccionado);
                 break;
             
-            //case INSTRUCTIONS_SCREEN:
-              //  currentPanel = new IntructionsPanel(this);
-                //((IntructionsPanel)currentPanel).setupUI();
-                //break;
                 case INSTRUCTIONS_SCREEN:
-            currentPanel = new InstruccionesPanel(this);
-            break;
+                 currentPanel = new InstruccionesPanel(this);
+                break;
 
+            /*case INSTRUCTIONS_SCREEN:
+               currentPanel = new IntruccionesPanel(this);
+                ((IntruccionesPanel)currentPanel).setupUI();
+                 break;
+            */
             //case CHARACTER_SELECT_SCREEN:
               //  currentPanel = new CharacterSelectPanel(this);
                // ((CharacterSelectPanel)currentPanel).setupUI();
@@ -132,8 +134,9 @@ public class MainFrame extends JFrame {
         }
      
         currentPanel.setName(screenName);
-    setContentPane(currentPanel);  // <<--- Este es el cambio importante
-    revalidate();
-    repaint();
-}
-}
+        setContentPane(currentPanel);
+        revalidate();
+        repaint();
+        
+    }
+}    
