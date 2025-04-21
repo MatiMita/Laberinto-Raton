@@ -1,15 +1,11 @@
 package pages;
 
-//import java.io.FileWriter;
-//import java.io.IOException;
-
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import app.MainFrame;
 
 public class Opciones extends JPanel {
@@ -37,30 +33,24 @@ public class Opciones extends JPanel {
         JButton ratonBlanco = new JButton("Ratón Blanco");
         ratonBlanco.setBounds(300, 200, 200, 40);
         styleMouseButton(ratonBlanco);
-        ratonBlanco.addActionListener((ActionEvent e) -> {
-          //  registrarSeleccion("Ratón Blanco");
-           // frame.showCasillaNiveles("Ratón Blanco");
-           frame.setUltimoRatonSeleccionado("Ratón Blanco");
+        ratonBlanco.addActionListener(_ -> {
+           frame.setUltimoRatonSeleccionado("BLANCO");
            frame.showScreen(MainFrame.NIVELES_SCREEN);
         });
         
         JButton ratonCafe = new JButton("Ratón Café");
         ratonCafe.setBounds(300, 260, 200, 40);
         styleMouseButton(ratonCafe);
-        ratonCafe.addActionListener((ActionEvent e) -> {
-          //  registrarSeleccion("Ratón Café");
-            //frame.showCasillaNiveles("Ratón Café");
-            frame.setUltimoRatonSeleccionado("Ratón Café");
+        ratonCafe.addActionListener(_ -> {
+            frame.setUltimoRatonSeleccionado("CAFE");
             frame.showScreen(MainFrame.NIVELES_SCREEN);
         });
 
         JButton ratonPlomo = new JButton("Ratón Plomo");
         ratonPlomo.setBounds(300, 320, 200, 40);
         styleMouseButton(ratonPlomo);
-        ratonPlomo.addActionListener((ActionEvent e) -> {
-          //  registrarSeleccion("Ratón Plomo");
-            //frame.showCasillaNiveles("Ratón Plomo");
-            frame.setUltimoRatonSeleccionado("Ratón Plomo");
+        ratonPlomo.addActionListener(_ -> {
+            frame.setUltimoRatonSeleccionado("PLOMO");
             frame.showScreen(MainFrame.NIVELES_SCREEN); 
         });
 
@@ -77,26 +67,17 @@ public class Opciones extends JPanel {
         botonRegresar.setFocusPainted(false);
         add(botonRegresar);
 
-        botonRegresar.addActionListener((ActionEvent e) -> {
-           // frame.showScreen(MainFrame.NIVELES_SCREEN); 
+        botonRegresar.addActionListener(_ -> {
             frame.showScreen(MainFrame.MENU_SCREEN);
 
         });
     }
+
     private void styleMouseButton(JButton button) {
         button.setBackground(Color.WHITE);
         button.setForeground(new Color(100, 70, 160));
         button.setFont(new Font("Arial", Font.PLAIN, 16));
         button.setFocusPainted(false);
     }
-   /*  private void registrarSeleccion(String raton) {
-        try (FileWriter writer = new FileWriter("selecciones.txt", true)) { 
-            writer.write("Seleccionaste el " + raton + "\n");
-            System.out.println("Registrado: " + raton); 
-        } catch (IOException ex) {
-            System.err.println("Error al guardar selección: " + ex.getMessage());
-        }
-    }*/
-    
     
 }

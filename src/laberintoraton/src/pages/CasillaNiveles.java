@@ -2,7 +2,6 @@ package pages;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import app.MainFrame;
 
 public class CasillaNiveles extends JPanel {
@@ -21,7 +20,7 @@ public class CasillaNiveles extends JPanel {
         botonFacil.setBounds(300, 200, 200, 40);
         styleButton(botonFacil);
         add(botonFacil);
-        botonFacil.addActionListener(e -> {
+        botonFacil.addActionListener(_ -> {
             frame.showGame(frame.getRatonSeleccionado(), "FACIL");
         });
         
@@ -30,7 +29,7 @@ public class CasillaNiveles extends JPanel {
         botonMedio.setBounds(300, 260, 200, 40);
         styleButton(botonMedio);
         add(botonMedio);
-        botonMedio.addActionListener(e -> {
+        botonMedio.addActionListener(_ -> {
             frame.showGame(frame.getRatonSeleccionado(), "MEDIO");
         });
 
@@ -38,7 +37,7 @@ public class CasillaNiveles extends JPanel {
         botonDificil.setBounds(300, 320, 200, 40);
         styleButton(botonDificil);
         add(botonDificil);
-        botonDificil.addActionListener(e -> {
+        botonDificil.addActionListener(_ -> {
             frame.showGame(frame.getRatonSeleccionado(), "DIFICIL");
         });
 
@@ -50,9 +49,9 @@ public class CasillaNiveles extends JPanel {
         botonRegresar.setForeground(Color.WHITE);
         botonRegresar.setFont(new Font("Arial", Font.BOLD, 14));
         botonRegresar.setFocusPainted(false);
-        botonRegresar.addActionListener((ActionEvent e) -> {
-            frame.showPantallaOpciones();
- });
+                botonRegresar.addActionListener(_ -> {
+                    frame.showPantallaOpciones();
+        });
         add(botonRegresar);
     }
 
@@ -62,11 +61,4 @@ public class CasillaNiveles extends JPanel {
         button.setFont(new Font("Arial", Font.PLAIN, 16));
         button.setFocusPainted(false);
     }
-
-   /*  private void cargarJuego(JFrame frame, String dificultad, String raton) {
-        LaberintoPanel juego = new LaberintoPanel(dificultad, raton);
-        frame.setContentPane(juego);
-        frame.revalidate();
-    } */
-
 }
